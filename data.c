@@ -19,7 +19,7 @@ char* cities_menu[] =
 int cities_menu_length = 4;
 
 char* wifi_menu[] =
-{"Disconnect","Available","Back"};
+{"Connect","Disconnect","Available","Back"};
 int wifi_menu_length = 3;		
 
 
