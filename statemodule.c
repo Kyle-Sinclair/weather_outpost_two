@@ -13,171 +13,164 @@
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "master.h"  /* Declatations for these labs */
+extern char* home_menu[];
+extern int home_menu_length;
+extern char* cities_menu[];
+extern int cities_menu_length;
+extern char* wifi_menu[] ;
+extern int wifi_menu_length;
+
+	//Store all the menus as data objects elsewhere
+	//for navigate keyboard
+		//during a button processButtons
+			//calculate which type ofk eyboard
+				//default, dispatch to password the value of currentcolumna nd currentline transformed into an appropriate value
+					//two special cases, back and forwards
+
+
+
 
 int timeoutcount = 0; // global counter
 volatile int currentline = 0;
 volatile int currentcolumn = 13;
-volatile int currentmenu = 0;
+
 volatile char display_type = 'm';
 //volatile char password[];
-volatile int currentmenulength = 7;
-char *menu[10];
+volatile int currentmenulength = 4;
+char * menu[10];
 //char** menu2;
-char* menu2[4];
-char* str0 = "good point";
-char* str1 = "goodbye";
-char* str2 = "fuck off";
-char* str3 = "raaaghhhh";
-char* str4 = "second";
-char* str5 = "menu";
-char* str6 = "here";
-// currentmenu = &menu;
-/* Interrupt Service Routine */
+
+
 
 //Write a wifi network ESP request into menu_navigation
 //Write a keyboard print function
 //Write a keyboard select function
 //Write a wifi array building function and print it for arbitrary lengths
+//keyboard column navigate
+//city request ascii construction
+//city info display
 //
-
-void user_isr( void )
-	{
-
-  if((IFS(0) & 0x100) == 0x100)
-
-		{
-		TMR2 = 0x0; // Clear timer register
-		IFS(0) = IFS(0) & 0xfffffeff; // reset event flag
-		timeoutcount++;
-  	}
-
-  if(timeoutcount == 3)
-
-		{ // execute display/time functions after count reaches 10
-		PORTE = currentmenu;
-		timeoutcount = 0;
-		int btnpress = getbtns();
-  	processButtons(btnpress);
-		}
-
-	}
-
-
-
-/* This function is called repetitively from the main program */
-void loop( void )
-	{
-	display_update();
-	}
 
 
 
 
 
 		void navigate()
-			{if(currentmenu == 0)
+			{if(*menu == *home_menu)
 				switch(currentline)
 				 {
-
+				
 					 // home menu options *************************************
 				 case 0:
 					 {
-					 display_menu(1);
-					 reset_menu_cursor(currentline, currentcolumn);
-					 currentmenu = 1;
+					 set_menu(cities_menu,cities_menu_length);
+					 clear_screen();
+					 print_menu(0);
+					 reset_menu_cursor();
 					 return;
 					 }
 				 case 1:
 					 {
-					 currentmenu = 2;
-					 display_menu(2);
-					 reset_menu_cursor(currentline, currentcolumn);
+					 set_menu(wifi_menu,wifi_menu_length);
+					 clear_screen();
+					 print_menu(0);
+					 reset_menu_cursor();
 					 return;
 					 }
 				 case 2:
 					 {
-					 currentmenu = 0;
-					 display_menu(0);
- 			   	 reset_menu_cursor(currentline, currentcolumn);
+					 set_menu(home_menu,home_menu_length);
+					 clear_screen();
+					 print_menu(0);
+					 reset_menu_cursor();
 					 return;
 					 }
 				 case 3:
 					 {
-					 currentmenu = 0;
-					 display_menu(0);
-					 reset_menu_cursor(currentline, currentcolumn);
+					 set_menu(home_menu,home_menu_length);
+					 clear_screen();
+					 print_menu(0);
+					 reset_menu_cursor();
 					 return;
 					 }
 				 }
 
-				else if(currentmenu == 1)
+				else if(*menu == *cities_menu)
 				{
 
 				switch(currentline)
-					 	{// City menu options ************************************
+					 {// City menu options ************************************
 					 case 0:
 						 {
-						 display_menu(1);//Unimplemented
-						 reset_menu_cursor(currentline, currentcolumn);
-						 currentmenu = 1;
+						 set_menu(cities_menu,cities_menu_length);
+						 clear_screen();
+						 print_menu(0);
+						 reset_menu_cursor();
 						 return;
 						 }
-						case 1:
-							{
-							 display_menu(1);//Unimplemented
-							 reset_menu_cursor(currentline, currentcolumn);
-							 currentmenu = 1;
-							 return;
-							}
-						case 2:
-							{
-							 display_menu(1);//Unimplemented
-							 reset_menu_cursor(currentline, currentcolumn);
-							 currentmenu = 1;
-							 return;
-							}
-						case 3:
-							{
-							 display_menu(0);//back function
-							 reset_menu_cursor(currentline, currentcolumn);
-							 currentmenu = 0;
-							 return;
-							}
+						 
+					case 1:
+						{
+						 set_menu(cities_menu,cities_menu_length);
+						 clear_screen();
+						 print_menu(0);
+						 reset_menu_cursor();
 						}
+						
+					case 2:
+						{
+						 set_menu(cities_menu,cities_menu_length);
+						 clear_screen();
+						 print_menu(0);
+						 reset_menu_cursor();
+						}
+						
+					case 3:
+						{
+						set_menu(home_menu,home_menu_length);//back function
+						clear_screen();
+						print_menu(0);
+						reset_menu_cursor();
+							
+						return;
+						}
+					}
 				}
-			else if(currentmenu == 2)
+			else if(*menu == *wifi_menu)
 				{
 					// Wifi menu options **************************************
 				switch(currentline)
 					{
 						case 0:
 							{
-
+						
 							ESP_Return_Networks();
-							print_menu(6);
-							reset_menu_cursor(currentline,currentcolumn);
-							currentmenu = 5;
+							clear_screen();
+							print_menu(0);
+							reset_menu_cursor();
 							return;
 							}
 						case 1:
 							{
-							display_menu(2);//Unimplemented
-							reset_menu_cursor(currentline, currentcolumn);
-							currentmenu = 2;
+							clear_screen();	
+							print_menu(0);
+							reset_menu_cursor();
 							return;
 							}
 						case 2:
 							{
-							display_menu(2);//Unimplemented
-							reset_menu_cursor(currentline, currentcolumn);
-							currentmenu = 2;
+							set_menu(home_menu,home_menu_length);
+							print_menu(0);
+							reset_menu_cursor();
+							
 							return;
 							}
 						case 3:
 							{
-							display_menu(0);//back function
-							reset_menu_cursor(currentline, currentcolumn);
-							currentmenu = 0;
+							set_menu(home_menu,home_menu_length);
+							print_menu(0);
+							reset_menu_cursor();
+						
 							return;
 							}
 						}
@@ -186,6 +179,9 @@ void loop( void )
 
 			return;
 			}
+			
+			
+			
 
 					void processButtons(int buttonPress)
 						{
@@ -213,68 +209,47 @@ void loop( void )
 										}
 								if(buttonPress & 0x2) // button 2
 									  {
-										put_keyboard_cursor(currentline + 1);
+										//move_keyboard_cursor(1);
 							 			}
 								if(buttonPress & 0x1) // button 1
 										{
-										put_keyboard_cursor(currentline - 1);
+										//move_keyboard_cursor(-1);
 										}
 								}
 							}
-	void put_keyboard_cursor(int index)
-			{
-			textbuffer[currentline][currentcolumn] = ' ';
-			if() == 4)
-				{currentcolumn = mod(currentcolumn + 2,14);}
-			else if(index == 0)
-			currentline = mod(index,currentmenulength);
-			print_menu(currentline);
-			if((direction + currentline) == 4)
-				currentcolumn = mod(currentcolumn + 2,14);
-			else if((direction + currentline) == -1)
-				currentcolumn = mod(currentcolumn - 2, 14);
-
-			currentline = mod(currentline+direction,4);
-			textbuffer[currentline][currentcolumn] = '*';
-			return;
-			}
+	// void move_keyboard_cursor(int index)
+	// 		{
+	// 		textbuffer[currentline][currentcolumn] = ' ';
+	// 		if((direction + currentline) == 4)
+	// 			currentcolumn = mod(currentcolumn + 2,14);
+	// 		else if((direction + currentline) == -1)
+	// 			currentcolumn = mod(currentcolumn - 2, 14);
+	//
+	// 		currentline = mod(currentline+direction,4);
+	// 		textbuffer[currentline][currentcolumn] = '*';
+	// 		return;
+	// 		}
 
 
-					void put_menu_cursor_at(int index)
-						{
-						textbuffer[mod(currentline,4)][13] = ' ';
 
-						currentline = mod(index,currentmenulength);
-						print_menu(currentline);
-						textbuffer[mod(currentline,4)][13] = '*';
-						}
-
-// void test_menu(char** menu2)
-// 	{
-// 	display_string(0,menu2[0]);
-// 	display_string(1,"hello");
-// 	display_string(2,menu2[1]);
-// 	}
-
-
-char** set_menu()
+void set_menu(char** new_menu, int menu_length)
 	{
-	//char** menuStrings;
-	/*char str0 = "good point";
-	char str1 = "goodbye";
-	char str2 = "fuck off";
-	char str3 = "raaaghhhh";*/
-	menu[0] = str0;
-	menu[1] = str1;
-	menu[2] = str2;
-	menu[3] = str3;
-	menu[4] = "second";
-	menu[5]= "menu";
-	menu[6] = "here";
-	return menu;
-	//menu2 = *menuStrings;
+	currentmenulength = menu_length;
+	int i = 0;
+	for(i; i < currentmenulength;i++)
+		{
+		menu[i] = new_menu[i];	
+		}
+	 
 	}
 
+void put_menu_cursor_at(int index)
+	{
+	textbuffer[mod(currentline,4)][13] = ' ';
+	currentline = mod(index,currentmenulength);
+	print_menu(currentline);
+	textbuffer[mod(currentline,4)][13] = '*';
+	}
 
 
 void reset_menu_cursor()
@@ -297,40 +272,99 @@ void navigate_keyboard( )
 		{
 		return;
 		}
-
+void clear_screen()
+	{
+	 display_string(0," ");
+	 display_string(1," ");
+	 display_string(2," ");
+	 display_string(3," ");
+	}
 void print_menu(int start)
 	{
+	clear_screen();
 	int jump = start/4;
 	int i = 0 + 4*jump;
 	int j = 0;
 	for(j; j < 4; j++)
 		{
 		if(i >=  currentmenulength)
-			display_string(j," ");
-		else
-			display_string(j, menu[i]);
+			return;
+		display_string(j, menu[i]);
 		i++;
 		}
 	}
 
-	//Store all the menus as data objects elsewhere
-	//for navigate keyboard
-		//during a button processButtons
-			//calculate which type ofk eyboard
-				//default, dispatch to password the value of currentcolumna nd currentline transformed into an appropriate value
-					//two special cases, back and forwards
+void initialize( void )
+	{
+	 TRISE = TRISE & ~0xff; // set LEDs to output (initialize 8 lsb of Port E to outputs)
+	 TRISD = TRISD | ~0xffffe01f; // set bits 11 through 5 of Port D as inputs
 
+
+	 T2CON = 0x70; // set prescale for timer to 1:256
+	 TMR2 = 0x0; // Clear timer register
+	  PR2 = 31250; // Load period register (80 mHz/256/10 = 31,250)
+
+	 IPC(2) = IPC(2) | 0x1C; // set highest priority (7)
+	 IPC(2) = IPC(2) | 0x3; // set highest subpriority (3)
+	 enable_interrupt(); // enable global interrupts
+	 IEC(0) = IEC(0) | 0x100; // enable Timer 2 interrupt
+
+	 T2CON = T2CON | 0x8000; // Start timer
+	  
+	set_menu(home_menu,home_menu_length);
+	print_menu(0); //Displays initial options
+	
+	
+	textbuffer[0][13] = '*';
+	}
+					
+					
 void ESP_Return_Networks()
 	{
-
-	menu[0] = "network";
-	menu[1] = "second";
-	menu[2] = "Ola   ";
-	menu[3] = "smells";
-	menu[4] = "TESTING";
-	menu[5] = "Is this";
-	menu[6] = "thing on?";
-	menu[7] = "Helllooo?";
-	menu[8] = "Finally";
-	currentmenulength = 9;
+	char* new_menu[10] ;
+	new_menu[0] = "network";
+	new_menu[1] = "second";
+	new_menu[2] = "Ola   ";
+	new_menu[3] = "smells";
+	new_menu[4] = "TESTING";
+	new_menu[5] = "Is this";
+	new_menu[6] = "thing on?";
+	new_menu[7] = "Helllooo?";
+	new_menu[8] = "Finally";
+	int length = 9;
+	set_menu(new_menu,9);
 	}
+	
+	
+	
+	
+	
+void user_isr( void )
+{
+
+  if((IFS(0) & 0x100) == 0x100)
+	{
+	TMR2 = 0x0; // Clear timer register
+	IFS(0) = IFS(0) & 0xfffffeff; // reset event flag
+	timeoutcount++;
+  	}
+
+  if(timeoutcount == 3)
+	{ // execute display/time functions after count reaches 10
+	//PORTE = currentmenu;
+	timeoutcount = 0;
+	int btnpress = getbtns();
+	processButtons(btnpress);
+	}
+
+}
+
+
+
+/* This function is called repetitively from the main program */
+void loop( void )
+	{
+	display_update();
+	}
+
+
