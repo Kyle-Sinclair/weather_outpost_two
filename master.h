@@ -20,10 +20,10 @@ void put_menu_cursor_at(int index);
 void display_keyboard();
 void send_menu();
 void navigate_keyboard();
-void put_keyboard_cursor(int direction);
+void move_keyboard_cursor(int direction);
 /* Declare display-related functions from mipslabfunc.c */
 void move_cursor(int direction);
-void display_menu(int select);
+void display_menu(char* menu[],int select);
 void display_image(int x, const uint8_t *data);
 void display_init(void);
 void display_string(int line, char *s);
@@ -34,10 +34,11 @@ void display_debug( volatile int * const addr );
 void print_array();
 void print_menu(int start);
 void checkforpageroll();
-char** set_menu();
+void set_menu(char** new_menu, int menu_length);
 //Dummy functions
 void ESP_Return_Networks();
 void test_menu(char** menu);
+void clear_screen();
 /* Declare display_debug - a function to help debugging.
 
    After calling display_debug,
