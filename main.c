@@ -48,9 +48,14 @@ int main(void) {
 	SPI2CONSET = 0x8000;
 
 	display_init();
+	
 	display_update();
-	display_image(96, icon);
+	//display_image(96, icon);
 	initialize(); /* Do any lab-specific initialization */
+
+
+
+
 
 
 	while( 1 )
