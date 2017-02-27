@@ -25,7 +25,7 @@ static void num32asc( char * s, int );
 
 
 
-void display_menu(int select)
+void display_menu(char* menu[],int select)
 	{
 	switch(select)
 		{
