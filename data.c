@@ -10,10 +10,17 @@
 
 char textbuffer[4][16];
 
+char* home_menu[] =
+ {"Cities","Wifi","Compare",};
+int home_menu_length = 3;
 
+char* cities_menu[] =
+{"Stkholm","New York","London","Back"};
+int cities_menu_length = 4;
 
-
-
+char* wifi_menu[] =
+{"Disconnect","Available","Back"};
+int wifi_menu_length = 3;		
 
 
 const uint8_t const font[] = {
@@ -146,10 +153,6 @@ const uint8_t const font[] = {
 	0, 0, 4, 2, 4, 2, 0, 0,
 	0, 120, 68, 66, 68, 120, 0, 0,
 };
-
-// const char* keyboard_lower_case[] =
-// {	}
-
 
 const uint8_t const icon[] = {
 	255, 255, 255, 255, 255, 255, 127, 187,
