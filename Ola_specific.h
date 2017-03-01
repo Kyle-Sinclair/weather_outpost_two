@@ -1,8 +1,113 @@
-void set_keyboard(char* keyboardChars, int numberOfChars);
-//The first parameter will now be arrays of chars that are pre-built in data.c, just
-//as icon and font are. Defining a variable for each keyboard for numberofChars will make life easier as well
-//Generally then, a function call will look like 
-// "set_keyboard(lower_case_chars, lower_Case_chars_length);"
+This function prints the keyboard at a particular starting position.
+If that starting position is past the first 21 letters (I.E it 
+goes past the first keyboard and into the second, it starts from there)
+
+  clear_screen is necessary at the start to ensure that the password
+  shows appropriately after deletes
+  
+  
+                                                       
+
+
+
+
+void print_keyboard(volatile int start)
+	{
+	//if start is greater then 21, jump ahead 18 spots
+	//if greater then 42, jump ahead two spots
+	clear_screen();
+	int jump = start/21;
+	int index = 0 + jump * 21;
+	int row;
+	int col;
+	for(col = 0;col<7;col++)
+		{
+		for (row = 0; row < 3; row++)
+			{
+			if(index == 70)
+				return;
+			textbuffer[row][2*col] = keyboard[index];
+			index++;
+			print_password();
+			}
+		}
+	}
+
+//Calling this after every cursor move ensures that password updates 
+//instantly
+
+void clear_screen()
+	{
+	 display_string(0," ");
+	 display_string(1," ");
+	 display_string(2," ");
+	 display_string(3," ");
+	}
+
+
+void print_password()
+	{
+	int i = 0;
+	for(i; i < passwordLength;i++ )
+		{
+		textbuffer[3][i] = password[i];
+		}
+	}
+
+
+//call this when switching to a new keyboard menu
+//It puts the cursor at the right place
+
+void reset_keyboard_cursor()
+		{
+		currentline = 0;
+		currentcolumn = 1;
+		textbuffer[0][1] = '*';
+		
+		}
+
+
+//The default response is just to add the chosen index result to
+//password
+
+
+//currently deleting from the password is done just
+//by reducing password length by 1, and then never reading 
+//or returning beyond that point. This is done currently by pressing 
+//the 70th index of the keyboard array. You can change it to use the first button instead
+
+
+void navigate_keyboard()
+	{
+	switch(keyboard_index)
+		{
+		case 69:
+			{
+			submit_password();
+			}
+		case 70:
+			{
+
+			passwordLength--;
+			}
+		default:
+			{
+			password[passwordLength] = keyboard[keyboard_index];
+			passwordLength++;
+			print_password();
+			}
+		}
+	}
+
+//currently deleting from the password is done just
+//by reducing password length by 1, and then never reading 
+//or returning beyond that point. This is done currently by pressing 
+//the 70th index of the keyboard array. You can change it to use the first button instead
+
+
+
+
+
 
 
 void send_menu(char** menuStrings, int numberOfStrings);
