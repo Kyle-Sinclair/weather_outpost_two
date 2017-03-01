@@ -104,7 +104,7 @@ void processButtons(int buttonPress)
 							{
 							put_keyboard_cursor_at(keyboard_index - 1);
 							}
-						
+							
 						}
 			}
 
@@ -226,6 +226,7 @@ void processButtons(int buttonPress)
 										{
 										clear_screen();
 										print_keyboard(0);
+										reset_keyboard_cursor();
 						
 										menutype = 'k';
 										return;
@@ -353,8 +354,8 @@ void reset_keyboard_cursor()
 		{
 		currentline = 0;
 		currentcolumn = 1;
-		textbuffer[currentline][currentcolumn] = ' ';
 		textbuffer[0][1] = '*';
+		
 		}
 
 //Interrupts *****************************************************************
